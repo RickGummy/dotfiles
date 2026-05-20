@@ -80,8 +80,14 @@ vim.keymap.set("n", "<leader>tc", function()
 end, { desc = "Close all terminals" })
 
 -- VSCode type shit
-vim.keymap.set({ "i", "n" }, "<D-CR>", "<Esc>o", { desc = "New line below" })
-vim.keymap.set({ "i", "n" }, "<D-S-CR>", "<Esc>O", { desc = "New line above" })
+vim.keymap.set({ "i", "n" }, "<D-CR>", function()
+    vim.cmd("normal! o")
+    vim.cmd("startinsert")
+end, { desc = "New line below (insert mode)" })
+vim.keymap.set({ "i", "n" }, "<D-S-CR>", function()
+    vim.cmd("normal! O")
+    vim.cmd("startinsert")
+end, { desc = "New line above (insert mode)" })
 
 -- shift enter bitch.
 vim.keymap.set("i", "<S-CR>", "<CR>", { remap = true })
