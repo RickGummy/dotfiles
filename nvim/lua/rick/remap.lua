@@ -98,3 +98,39 @@ vim.keymap.set("n", "<leader>M", function()
         vim.cmd("vertical Man " .. word)
     end
 end, { desc = "Man page lookup by typing " })
+
+
+
+
+
+
+-- switch between color schemes variants, cause i want to have fun
+local colorschemes = {
+    "catppuccin-mocha",
+    "rose-pine-moon",
+    "tokyonight-moon",
+    "catppuccin-macchiato",
+    "catppuccin-frappe",
+    "catppuccin-latte",
+    "rose-pine",
+    "rose-pine-moon",
+    "tokyonight-night",
+    "tokyonight-storm",
+    "tokyonight-moon",
+}
+
+local color_index = 1
+
+-- next color scheme
+vim.keymap.set("n", "<leader>tn", function()
+    color_index = color_index % #colorschemes + 1
+    vim.cmd.colorscheme(colorschemes[color_index])
+    print("Colorscheme: " .. colorschemes[color_index])
+end, { desc = "next colorscheme" })
+
+-- previous color scheme
+vim.keymap.set("n", "<leader>tp", function()
+    color_index = (color_index - 2) % #colorschemes + 1
+    vim.cmd.colorscheme(colorschemes[color_index])
+    print("Colorscheme: " .. colorschemes[color_index])
+end, { desc = "previous colorscheme" })

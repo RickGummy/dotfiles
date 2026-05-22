@@ -32,6 +32,19 @@ require("lazy").setup({
             vim.cmd.colorscheme("catppuccin")
         end,
     },
+    
+    -- rose-pine
+    {
+        "rose-pine/neovim",
+        name = "rose-pine",
+        priority = 1000,
+    },
+
+    -- tokyonight
+    {
+        "folke/tokyonight.nvim",
+        priority = 1000,
+    },
 
     -- telescope, fuzzy finder
     {
