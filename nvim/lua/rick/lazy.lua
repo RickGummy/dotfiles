@@ -32,7 +32,7 @@ require("lazy").setup({
             vim.cmd.colorscheme("catppuccin")
         end,
     },
-    
+
     -- rose-pine
     {
         "rose-pine/neovim",
@@ -80,7 +80,10 @@ require("lazy").setup({
                     enable = true,
                     additional_vim_regex_highlighting = false,
                 },
-                indent = { enable = true },
+                indent = {
+                    enable = true,
+                    disable = { "python" },
+                },
             })
         end,
     },
@@ -183,7 +186,9 @@ require("lazy").setup({
                     vim.api.nvim_create_autocmd("BufWritePre", {
                         buffer = event.buf,
                         callback = function()
-                            vim.lsp.buf.format({ async = false })
+                            if vim.bo[event.buf].filetype ~= "python" then
+                                vim.lsp.buf.format({ async = false })
+                            end
                         end,
                     })
                     vim.keymap.set("n", "[d", function() vim.diagnostic.jump({ count = -1 }) end, opts)
@@ -250,4 +255,19 @@ require("lazy").setup({
         end,
     },
 
+    -- conform.nvim, formatter
+    {
+        "stevearc/conform.nvim",
+        config = function()
+            require("conform").setup({
+                formatters_by_ft = {
+                    python = { "black" },
+                },
+                format_on_save = {
+                    timeout_ms = 1000,
+                    lsp_format = "fallback",
+                },
+            })
+        end,
+    },
 })
