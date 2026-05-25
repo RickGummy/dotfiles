@@ -13,6 +13,7 @@ config.hide_tab_bar_if_only_one_tab = true
 config.window_decorations = "RESIZE"
 
 config.keys = {
+    -- press enter
     {
         key = 'Enter',
         mods = 'CMD',
@@ -22,6 +23,47 @@ config.keys = {
         key = 'Enter',
         mods = 'CMD|SHIFT',
         action = wezterm.action.SendString '\x1b[13;10u',
+    },
+
+    -- split panes
+    {
+        key = 'd',
+        mods = 'CMD',
+        action = wezterm.action.SplitHorizontal { domain = 'CurrentPaneDomain' },
+    },
+    {
+        key = 'd',
+        mods = 'CMD|SHIFT',
+        action = wezterm.action.SplitVertical { domain = 'CurrentPaneDomain' },
+    },
+
+    -- Move between panes
+    {
+        key = 'LeftArrow',
+        mods = 'CMD',
+        action = wezterm.action.ActivatePaneDirection 'Left',
+    },
+    {
+        key = 'RightArrow',
+        mods = 'CMD',
+        action = wezterm.action.ActivatePaneDirection 'Right',
+    },
+    {
+        key = 'UpArrow',
+        mods = 'CMD',
+        action = wezterm.action.ActivatePaneDirection 'Up',
+    },
+    {
+        key = 'DownArrow',
+        mods = 'CMD',
+        action = wezterm.action.ActivatePaneDirection 'Down',
+    },
+
+    -- Close a pane
+    {
+        key = 'w',
+        mods = 'CMD',
+        action = wezterm.action.CloseCurrentPane { confirm = true },
     },
 }
 
