@@ -75,12 +75,25 @@ config.keys = {
         action = wezterm.action.ScrollByLine(5),
     },
 
-    -- Close a pane
+    -- tabs
+    {
+        key = 't',
+        mods = 'CMD',
+        action = wezterm.action.SpawnTab 'CurrentPaneDomain',
+    },
     {
         key = 'w',
         mods = 'CMD',
+        action = wezterm.action.CloseCurrentTab { confirm = false },
+    },
+
+    -- Close pane
+    {
+        key = 'w',
+        mods = 'CMD|SHIFT',
         action = wezterm.action.CloseCurrentPane { confirm = true },
     },
+
 }
 
 
