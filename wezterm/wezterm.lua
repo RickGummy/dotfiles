@@ -12,6 +12,10 @@ config.font_size = 14
 config.hide_tab_bar_if_only_one_tab = true
 config.window_decorations = "RESIZE"
 
+config.enable_scroll_bar = true
+
+config.scrollback_lines = 10000
+
 config.keys = {
     -- press enter
     {
@@ -57,6 +61,18 @@ config.keys = {
         key = 'DownArrow',
         mods = 'CMD',
         action = wezterm.action.ActivatePaneDirection 'Down',
+    },
+
+    -- scrolling
+    {
+        key = 'k',
+        mods = 'CMD|SHIFT',
+        action = wezterm.action.ScrollByLine(-5),
+    },
+    {
+        key = 'j',
+        mods = 'CMD|SHIFT',
+        action = wezterm.action.ScrollByLine(5),
     },
 
     -- Close a pane
