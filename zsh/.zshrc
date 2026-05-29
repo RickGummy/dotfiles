@@ -132,3 +132,6 @@ alias gp='git push'
 alias gs='git status'
 # thanks matthew
 alias gacp='git add . && git commit -m "IM TOO LAZY TO WRITE ONE SO THIS IS AN AUTO COMMIT, LOL" && git push'
+
+# bun completions
+[ -s "/Users/rickgummy/.bun/_bun" ] && source "/Users/rickgummy/.bun/_bun"
