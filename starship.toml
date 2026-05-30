@@ -8,7 +8,7 @@ format = "[$user]($style) "
 [directory]
 style = "bold cyan"
 format = "[$path]($style) "
-truncation_length = 3
+truncation_length = 5
 truncate_to_repo = false
 
 [git_branch]
