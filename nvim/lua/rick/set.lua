@@ -12,7 +12,9 @@ vim.opt.expandtab = true
 vim.opt.smartindent = true
 
 -- Wrap
-vim.opt.wrap = false
+vim.opt.wrap = true
+vim.opt.linebreak = true
+vim.opt.breakindent = true
 vim.opt.whichwrap:append("<>[]hl")
 
 -- Search
