@@ -10,3 +10,4 @@ nvim/.lazy/
 # macOS junk
 .DS_Store
 zsh/.zsh_history
+gcloud/
