@@ -24,6 +24,7 @@ require("lazy").setup({
         "catppuccin/nvim",
         name = "catppuccin",
         priority = 1000,
+        cond = not vim.g.vscode,
         config = function()
             require("catppuccin").setup({
                 flavour = "mocha",
@@ -38,18 +39,21 @@ require("lazy").setup({
         "rose-pine/neovim",
         name = "rose-pine",
         priority = 1000,
+        cond = not vim.g.vscode,
     },
 
     -- tokyonight
     {
         "folke/tokyonight.nvim",
         priority = 1000,
+        cond = not vim.g.vscode,
     },
 
     -- telescope, fuzzy finder
     {
         "nvim-telescope/telescope.nvim",
         dependencies = { "nvim-lua/plenary.nvim" },
+        cond = not vim.g.vscode,
         config = function()
             local builtin = require("telescope.builtin")
             vim.keymap.set("n", "<leader>pf", builtin.find_files, { desc = "Telescope: find files" })
