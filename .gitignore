@@ -11,3 +11,7 @@ nvim/.lazy/
 .DS_Store
 zsh/.zsh_history
 gcloud/
+
+# zsh churn — regenerated every shell start
+zsh/.zcompdump*
+zsh/.zsh_sessions/
