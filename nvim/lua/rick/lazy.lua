@@ -49,21 +49,39 @@ require("lazy").setup({
         cond = not vim.g.vscode,
     },
 
+    -- kanagawa
+    {
+        "rebelot/kanagawa.nvim",
+        priority = 1000,
+        cond = not vim.g.vscode,
+    },
+
     -- telescope, fuzzy finder
     {
         "nvim-telescope/telescope.nvim",
         dependencies = { "nvim-lua/plenary.nvim" },
-        cond = not vim.g.vscode,
         config = function()
-            local builtin = require("telescope.builtin")
-            vim.keymap.set("n", "<leader>pf", builtin.find_files, { desc = "Telescope: find files" })
-            vim.keymap.set("n", "<leader>pg", builtin.git_files, { desc = "Telescope: find git-tracked files" })
-            vim.keymap.set("n", "<leader>ps", function()
-                builtin.grep_string({ search = vim.fn.input("Grep > ") })
-            end, { desc = "Telescope: grep across project" })
-            vim.keymap.set("n", "<leader>pw", builtin.grep_string, { desc = "Telescope: grep word under cursor" })
-            vim.keymap.set("n", "<leader>pb", builtin.buffers, { desc = "Telescope: open buffers" })
-            vim.keymap.set("n", "<leader>ph", builtin.help_tags, { desc = "Telescope: search help" })
+            if vim.g.vscode then
+                -- telescope's floating-window UI doesn't render inside VSCode,
+                -- so bridge the same keybinds to VSCode's native pickers instead
+                local vscode = require("vscode")
+                vim.keymap.set("n", "<leader>pf", function() vscode.action("workbench.action.quickOpen") end, { desc = "VSCode: quick open" })
+                vim.keymap.set("n", "<leader>pg", function() vscode.action("workbench.action.quickOpen") end, { desc = "VSCode: quick open" })
+                vim.keymap.set("n", "<leader>ps", function() vscode.action("workbench.action.findInFiles") end, { desc = "VSCode: find in files" })
+                vim.keymap.set("n", "<leader>pw", function() vscode.action("workbench.action.findInFiles") end, { desc = "VSCode: find word in files" })
+                vim.keymap.set("n", "<leader>pb", function() vscode.action("workbench.action.showAllEditors") end, { desc = "VSCode: show editors" })
+                vim.keymap.set("n", "<leader>ph", function() vscode.action("workbench.action.quickOpen") end, { desc = "VSCode: quick open" })
+            else
+                local builtin = require("telescope.builtin")
+                vim.keymap.set("n", "<leader>pf", builtin.find_files, { desc = "Telescope: find files" })
+                vim.keymap.set("n", "<leader>pg", builtin.git_files, { desc = "Telescope: find git-tracked files" })
+                vim.keymap.set("n", "<leader>ps", function()
+                    builtin.grep_string({ search = vim.fn.input("Grep > ") })
+                end, { desc = "Telescope: grep across project" })
+                vim.keymap.set("n", "<leader>pw", builtin.grep_string, { desc = "Telescope: grep word under cursor" })
+                vim.keymap.set("n", "<leader>pb", builtin.buffers, { desc = "Telescope: open buffers" })
+                vim.keymap.set("n", "<leader>ph", builtin.help_tags, { desc = "Telescope: search help" })
+            end
         end,
     },
 

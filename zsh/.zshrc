@@ -135,3 +135,4 @@ alias gacp='git add . && git commit -m "IM TOO LAZY TO WRITE ONE SO THIS IS AN A
 
 # bun completions
 [ -s "/Users/rickgummy/.bun/_bun" ] && source "/Users/rickgummy/.bun/_bun"
+export CMAKE_EXPORT_COMPILE_COMMANDS=ON

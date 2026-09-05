@@ -40,44 +40,63 @@ vim.keymap.set("n", "<C-l>", "<C-w>l", { desc = "Focus right split" })
 vim.keymap.set("n", "<leader>h", ":split<CR>", { desc = "Horizontal split" })
 
 -- run current file
-vim.keymap.set("n", "<leader>r", function()
-    vim.cmd("write")
-
+local function build_run_cmd()
     local ft = vim.bo.filetype
     local file = vim.fn.expand("%")
-    local cmd
 
     if ft == "python" then
-        cmd = "python3 " .. file
+        return "python3 " .. file
     elseif ft == "go" then
-        cmd = "go run " .. file
+        return "go run " .. file
     elseif ft == "cpp" then
-        cmd = "g++ -std=c++20 " .. file .. " -o /tmp/run && /tmp/run"
+        return "g++ -std=c++20 " .. file .. " -o /tmp/run && /tmp/run"
     elseif ft == "c" then
-        cmd = "gcc " .. file .. " -o /tmp/run && /tmp/run"
+        return "gcc " .. file .. " -o /tmp/run && /tmp/run"
     else
         print("no run command, go add it for " .. ft)
-        return
+        return nil
     end
+end
 
-    for _, buf in ipairs(vim.api.nvim_list_bufs()) do
-        if vim.bo[buf].buftype == "terminal" then
-            vim.api.nvim_buf_delete(buf, { force = true })
+if vim.g.vscode then
+    -- nvim's :terminal isn't supported by vscode-neovim, so bridge to VSCode's real integrated terminal
+    local vscode = require("vscode")
+
+    vim.keymap.set("n", "<leader>r", function()
+        vim.cmd("write")
+        local cmd = build_run_cmd()
+        if not cmd then return end
+        vscode.action("workbench.action.terminal.new")
+        vscode.action("workbench.action.terminal.sendSequence", { args = { text = cmd .. "\r" } })
+    end, { desc = "Run current file" })
+
+    vim.keymap.set("n", "<leader>tc", function()
+        vscode.action("workbench.action.terminal.killAll")
+    end, { desc = "Close all terminals" })
+else
+    vim.keymap.set("n", "<leader>r", function()
+        vim.cmd("write")
+        local cmd = build_run_cmd()
+        if not cmd then return end
+
+        for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+            if vim.bo[buf].buftype == "terminal" then
+                vim.api.nvim_buf_delete(buf, { force = true })
+            end
         end
-    end
 
+        local height = math.floor(vim.o.lines * .3)
+        vim.cmd(height .. "split | terminal " .. cmd)
+    end, { desc = "Run current file" })
 
-    local height = math.floor(vim.o.lines * .3)
-    vim.cmd(height .. "split | terminal " .. cmd)
-end, { desc = "Run current file" })
-
-vim.keymap.set("n", "<leader>tc", function()
-    for _, buf in ipairs(vim.api.nvim_list_bufs()) do
-        if vim.bo[buf].buftype == "terminal" then
-            vim.api.nvim_buf_delete(buf, { force = true })
+    vim.keymap.set("n", "<leader>tc", function()
+        for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+            if vim.bo[buf].buftype == "terminal" then
+                vim.api.nvim_buf_delete(buf, { force = true })
+            end
         end
-    end
-end, { desc = "Close all terminals" })
+    end, { desc = "Close all terminals" })
+end
 
 -- VSCode type shit
 vim.keymap.set({ "i", "n" }, "<D-CR>", "<Esc>o", { desc = "New line below" })
@@ -105,32 +124,39 @@ end, { desc = "Man page lookup by typing " })
 
 
 -- switch between color schemes variants, cause i want to have fun
-local colorschemes = {
-    "catppuccin-mocha",
-    "rose-pine-moon",
-    "tokyonight-moon",
-    "catppuccin-macchiato",
-    "catppuccin-frappe",
-    "catppuccin-latte",
-    "rose-pine",
-    "rose-pine-moon",
-    "tokyonight-night",
-    "tokyonight-storm",
-    "tokyonight-moon",
-}
+if not vim.g.vscode then
+    local colorschemes = {
+        "catppuccin-mocha",
+        "rose-pine-moon",
+        "tokyonight-storm",
+        "catppuccin-macchiato",
+        "catppuccin-frappe",
+        "catppuccin-latte",
+        "kanagawa-wave",
+        "kanagawa-dragon",
+        "kanagawa-lotus",
+        "rose-pine",
+        "rose-pine-moon",
+        "rose-pine-dawn",
+        "tokyonight-night",
+        "tokyonight-storm",
+        "tokyonight-moon",
+        "tokyonight-day",
+    }
 
-local color_index = 1
+    local color_index = 1
 
--- next color scheme
-vim.keymap.set("n", "<leader>tn", function()
-    color_index = color_index % #colorschemes + 1
-    vim.cmd.colorscheme(colorschemes[color_index])
-    print("Colorscheme: " .. colorschemes[color_index])
-end, { desc = "next colorscheme" })
+    -- next color scheme
+    vim.keymap.set("n", "<leader>tn", function()
+        color_index = color_index % #colorschemes + 1
+        vim.cmd.colorscheme(colorschemes[color_index])
+        print("Colorscheme: " .. colorschemes[color_index])
+    end, { desc = "next colorscheme" })
 
--- previous color scheme
-vim.keymap.set("n", "<leader>tp", function()
-    color_index = (color_index - 2) % #colorschemes + 1
-    vim.cmd.colorscheme(colorschemes[color_index])
-    print("Colorscheme: " .. colorschemes[color_index])
-end, { desc = "previous colorscheme" })
+    -- previous color scheme
+    vim.keymap.set("n", "<leader>tp", function()
+        color_index = (color_index - 2) % #colorschemes + 1
+        vim.cmd.colorscheme(colorschemes[color_index])
+        print("Colorscheme: " .. colorschemes[color_index])
+    end, { desc = "previous colorscheme" })
+end
